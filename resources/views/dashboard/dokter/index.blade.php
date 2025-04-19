@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Dashboard Dokter</title>
+    <title>Dokter Dashboard</title>
 </head>
 <body>
-    <h1>Dashboard Dokter</h1>
-    <p>Welcome, Dr. {{ auth()->user()->nama_lengkap }}</p>
+    <h1>Dokter Dashboard</h1>
+    <p>Welcome, {{ auth()->user()->nama_lengkap }}</p>
 
     @if(session('success'))
         <div style="color: green;">
@@ -47,5 +47,9 @@
             @endforeach
         </tbody>
     </table>
+    <form action="{{ route('logout') }}" method="POST">
+        @csrf
+        <button type="submit">Logout</button>
+    </form>
 </body>
 </html>

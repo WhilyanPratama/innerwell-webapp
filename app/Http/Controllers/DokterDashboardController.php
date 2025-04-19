@@ -18,7 +18,7 @@ class DokterDashboardController
             ->orderBy('nomor_antrian')
             ->get();
 
-        return view('dokter.dashboard', compact('antrians'));
+        return view('dashboard.dokter.index', compact('antrians'));
     }
 
     public function nextPatient(Antrian $antrian)

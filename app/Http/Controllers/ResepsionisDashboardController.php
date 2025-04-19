@@ -6,7 +6,7 @@ use App\Models\Pendaftaran;
 use App\Models\Antrian;
 use Illuminate\Http\Request;
 
-class ResepsionisController
+class ResepsionisDashboardController
 {
     public function index()
     {
@@ -15,7 +15,7 @@ class ResepsionisController
             ->orderBy('created_at', 'asc')
             ->get();
 
-        return view('resepsionis.index', compact('pendaftaranList'));
+        return view('dashboard.resepsionis.index', compact('pendaftaranList'));
     }
 
     public function validate(Request $request, Pendaftaran $pendaftaran)

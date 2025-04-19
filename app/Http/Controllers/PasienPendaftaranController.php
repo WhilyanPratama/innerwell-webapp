@@ -8,7 +8,7 @@ use App\Models\JadwalDokter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth; // Add this import
 
-class PendaftaranController
+class PasienPendaftaranController
 {
     public function create()
     {

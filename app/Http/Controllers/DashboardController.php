@@ -8,26 +8,16 @@ class DashboardController
 {
     public function admin()
     {
-        return view('dashboard.admin');
-    }
-
-    public function dokter()
-    {
-        return view('dashboard.dokter');
+        return view('dashboard.admin.admindashboard');
     }
 
     public function pasien()
     {
-        return view('dashboard.pasien');
+        return view('dashboard.pasien.index');
     }
 
     public function manajemen()
     {
-        return view('dashboard.manajemen');
-    }
-
-    public function resepsionis()
-    {
-        return view('dashboard.resepsionis');
+        return view('dashboard.manajemen.index');
     }
 }
