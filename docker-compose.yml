@@ -1,0 +1,30 @@
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: innerwelljaya  # Ganti dengan password kuat
+      MYSQL_DATABASE: klinik_db
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    healthcheck:  # Tambahkan health check
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    depends_on:
+      mysql:
+        condition: service_healthy  # Tunggu sampai MySQL ready
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: innerwelljaya  # Harus sama dengan MYSQL_ROOT_PASSWORD
+    ports:
+      - "8080:80"
+
+volumes:
+  mysql_data:

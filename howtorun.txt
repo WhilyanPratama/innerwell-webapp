@@ -1,0 +1,35 @@
+docker compose up -d
+
+
+#install scantum : 
+
+composer require laravel/sanctum
+php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"
+
+
+role tinker :
+\App\Models\User::select('role')->distinct()->get();
+= Illuminate\Database\Eloquent\Collection {#1366
+    all: [
+      App\Models\User {#6263
+        role: "dokter",
+      },
+      App\Models\User {#6262
+        role: "pasien",
+      },
+      App\Models\User {#6265
+        role: "resepsionis",
+      },
+      App\Models\User {#6266
+        role: "manajemen",
+      },
+      App\Models\User {#6267
+        role: "admin",
+      },
+    ],
+  }
+
+
+php artisan route:cache
+php artisan config:cache
+
