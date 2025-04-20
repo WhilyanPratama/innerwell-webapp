@@ -6,6 +6,10 @@ docker compose up -d
 composer require laravel/sanctum
 php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"
 
+php artisan migrate:fres
+php artisan migrate
+php artisan db:seed
+
 
 role tinker :
 \App\Models\User::select('role')->distinct()->get();
