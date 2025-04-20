@@ -65,5 +65,5 @@ Route::middleware('role:manajemen')->group(function () {
 // Resepsionis routes
 Route::middleware('role:resepsionis')->group(function () {
     Route::get('/resepsionis/dashboard', [ResepsionisDashboardController::class, 'index'])->name('resepsionis.dashboard');
-    Route::post('/resepsionis/pendaftaran/{pendaftaran}/validate', [ResepsionisDashboardController::class, 'validate'])->name('resepsionis.validate');
+    Route::post('/resepsionis/dashboard/{pendaftaran}/validate', [ResepsionisDashboardController::class, 'validate'])->name('resepsionis.validate');
 });

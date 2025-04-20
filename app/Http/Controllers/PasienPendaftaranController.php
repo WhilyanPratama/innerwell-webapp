@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Pendaftaran;
 use App\Models\Poli;
 use App\Models\JadwalDokter;
@@ -53,4 +54,18 @@ class PasienPendaftaranController
 
         return view('pendaftaran.status', compact('pendaftaran', 'waitingPosition'));
     }
+
+    public function getJadwalDokter(Request $request)
+    {
+        $poli_id = $request->poli_id;
+        $tanggal = $request->tanggal;
+        $hari = strtolower(Carbon::parse($tanggal)->locale('id')->isoFormat('dddd'));
+
+        $jadwalDokter = JadwalDokter::with(['dokter.user'])
+            ->where('poli_id', $poli_id)
+            ->where('hari', $hari)
+            ->get();
+
+        return response()->json($jadwalDokter);
+        }
 }

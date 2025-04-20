@@ -47,7 +47,7 @@ class ResepsionisDashboardController
             ]);
         }
 
-        return redirect()->route('resepsionis.index')
+        return redirect()->route('resepsionis.dashboard')
             ->with('success', 'Pendaftaran berhasil ' . ($request->status === 'disetujui' ? 'disetujui' : 'ditolak'));
     }
 }

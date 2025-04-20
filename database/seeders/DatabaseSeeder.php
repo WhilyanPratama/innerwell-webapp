@@ -16,6 +16,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call([
+            JadwalDokterSeeder::class,
+        ]);
         // Create Admin User
         $adminUser = User::create([
             'username' => 'admin',
