@@ -94,6 +94,28 @@
             <p>Tidak ada pendaftaran yang sedang menunggu validasi</p>
         @endif
 
+    <h2>Riwayat Pemeriksaan</h2>
+    <table border="1">
+        <tbody>
+            <!-- @forelse($selesaiAntrians as $antrian)
+                <tr>
+                    <td>{{ $antrian->kode_antrian }}</td>
+                    <td>{{ $antrian->pendaftaran->pasien->user->nama_lengkap }}</td>
+                    <td>{{ $antrian->pendaftaran->keluhan }}</td>
+                    <td>{{ $antrian->pendaftaran->poli->nama_poli }}</td>
+                    <td>{{ ucfirst($antrian->status) }}</td>
+                    <td>
+                        <a href="{{ route('dokter.medical-record', $antrian->pendaftaran->pasien) }}">Lihat Rekam Medis</a>
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="6">Tidak ada pasien yang selesai diperiksa</td>
+                </tr>
+            @endforelse -->
+        </tbody>
+    </table>
+
     <form action="{{ route('logout') }}" method="POST">
         @csrf
         <button type="submit">Logout</button>

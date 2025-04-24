@@ -16,9 +16,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call([
-            JadwalDokterSeeder::class,
-        ]);
         // Create Admin User
         $adminUser = User::create([
             'username' => 'admin',
@@ -71,72 +68,217 @@ class DatabaseSeeder extends Seeder
             'deskripsi' => 'Poli untuk kesehatan anak',
         ]);
 
-        // Create Dokter Users
-        $dokterGigiUser = User::create([
-            'username' => 'dokter_gigi',
+        $poliTHT = Poli::create([
+            'nama_poli' => 'Poli THT',
+            'kode_poli' => 'D',
+            'deskripsi' => 'Poli untuk Pemeriksaan THT',
+        ]);
+
+        // Create Dokter Gigi Users
+        $dokterGigi1 = User::create([
+            'username' => 'dokter_sarah',
             'password' => Hash::make('password'),
             'role' => 'dokter',
-            'nama_lengkap' => 'Dr. Gigi Sehat',
+            'nama_lengkap' => 'drg. Sarah',
             'no_telp' => '081234567893',
             'nik' => '1234567890123459',
-            'email' => 'dokter.gigi@example.com',
+            'email' => 'dokter.gigi1@example.com',
         ]);
-
-        $dokterUmumUser = User::create([
-            'username' => 'dokter_umum',
+        $dokterGigi2 = User::create([
+            'username' => 'dokter_arya',
             'password' => Hash::make('password'),
             'role' => 'dokter',
-            'nama_lengkap' => 'Dr. Umum Sehat',
+            'nama_lengkap' => 'drg. Arya',
+            'no_telp' => '081234567893',
+            'nik' => '12345678901234591',
+            'email' => 'dokter.gigi2@example.com',
+        ]);
+        $dokterGigi3 = User::create([
+            'username' => 'dokter_faradilla',
+            'password' => Hash::make('password'),
+            'role' => 'dokter',
+            'nama_lengkap' => 'drg. Faradilla',
+            'no_telp' => '081234567893',
+            'nik' => '12345678901234529',
+            'email' => 'dokter.gigi3@example.com',
+        ]);
+
+        #Create dokter Anak User
+        $dokterAnak1 = User::create([
+            'username' => 'dokter_daffa',
+            'password' => Hash::make('password'),
+            'role' => 'dokter',
+            'nama_lengkap' => 'dr. Daffa S.An',
+            'no_telp' => '081234567893',
+            'nik' => '12345678901234593',
+            'email' => 'dokter.anak1@example.com',
+        ]);
+        $dokterAnak2 = User::create([
+            'username' => 'dokter_khalid',
+            'password' => Hash::make('password'),
+            'role' => 'dokter',
+            'nama_lengkap' => 'dr. Khalid S.An',
+            'no_telp' => '081234567893',
+            'nik' => '12345678901234594',
+            'email' => 'dokter.anak2@example.com',
+        ]);
+
+        #Create dokter Umum User
+        $dokterUmum1 = User::create([
+            'username' => 'dokter_ahmad',
+            'password' => Hash::make('password'),
+            'role' => 'dokter',
+            'nama_lengkap' => 'Dr. Ahmad',
             'no_telp' => '081234567894',
             'nik' => '1234567890123460',
-            'email' => 'dokter.umum@example.com',
+            'email' => 'dokter.umum1@example.com',
         ]);
-
-        $dokterAnakUser = User::create([
-            'username' => 'dokter_anak',
+        $dokterUmum2 = User::create([
+            'username' => 'dokter_Tirta',
             'password' => Hash::make('password'),
             'role' => 'dokter',
-            'nama_lengkap' => 'Dr. Anak Sehat',
+            'nama_lengkap' => 'Dr. Tirta',
+            'no_telp' => '081234567894',
+            'nik' => '12345678901234601',
+            'email' => 'dokter.umum2@example.com',
+        ]);
+        $dokterUmum3 = User::create([
+            'username' => 'dokter_safira',
+            'password' => Hash::make('password'),
+            'role' => 'dokter',
+            'nama_lengkap' => 'Dr. Safira',
+            'no_telp' => '081234567894',
+            'nik' => '12345678901234602',
+            'email' => 'dokter.umum3@example.com',
+        ]);
+
+        $dokterTHT1= User::create([
+            'username' => 'dokter_alfian',
+            'password' => Hash::make('password'),
+            'role' => 'dokter',
+            'nama_lengkap' => 'Dr. Alfian Firdaus Sp.THT-KL',
             'no_telp' => '081234567895',
-            'nik' => '1234567890123461',
-            'email' => 'dokter.anak@example.com',
+            'nik' => '12345678901234631',
+            'email' => 'dokter.THT1@example.com',
         ]);
 
         // Create Dokter Profiles
-        $dokterGigi = Dokter::create([
-            'user_id' => $dokterGigiUser->id,
+        $dokterGigi1 = Dokter::create([
+            'user_id' => $dokterGigi1->id,
+            'spesialisasi' => 'Gigi',
+        ]);
+        $dokterGigi2 = Dokter::create([
+            'user_id' => $dokterGigi2->id,
+            'spesialisasi' => 'Gigi',
+        ]);
+        $dokterGigi3 = Dokter::create([
+            'user_id' => $dokterGigi3->id,
             'spesialisasi' => 'Gigi',
         ]);
 
-        $dokterUmum = Dokter::create([
-            'user_id' => $dokterUmumUser->id,
+        $dokterAnak1 = Dokter::create([
+            'user_id' => $dokterAnak1->id,
+            'spesialisasi' => 'Anak',
+        ]);
+        $dokterAnak2 = Dokter::create([
+            'user_id' => $dokterAnak2->id,
+            'spesialisasi' => 'Anak',
+        ]);
+   
+
+        $dokterUmum1 = Dokter::create([
+            'user_id' => $dokterUmum1->id,
+            'spesialisasi' => 'Umum',
+        ]);
+        $dokterUmum2 = Dokter::create([
+            'user_id' => $dokterUmum2->id,
+            'spesialisasi' => 'Umum',
+        ]);
+        $dokterUmum3 = Dokter::create([
+            'user_id' => $dokterUmum3->id,
             'spesialisasi' => 'Umum',
         ]);
 
-        $dokterAnak = Dokter::create([
-            'user_id' => $dokterAnakUser->id,
-            'spesialisasi' => 'Anak',
+
+        $dokterTHT1 = Dokter::Create([
+            'user_id' => $dokterTHT1->id,
+            'spesialisasi' => 'THT',
         ]);
 
         // Create Pasien User
-        $pasienUser = User::create([
-            'username' => 'pasien',
+        $pasienUser1 = User::create([
+            'username' => 'pasien1',
             'password' => Hash::make('password'),
             'role' => 'pasien',
-            'nama_lengkap' => 'Pasien Satu',
+            'nama_lengkap' => 'Ny Dhiya Syifa',
             'no_telp' => '081234567896',
-            'nik' => '1234567890123462',
-            'email' => 'pasien@example.com',
+            'nik' => '12345678901234621',
+            'email' => 'pasien1@example.com',
+        ]);
+        $pasienUser2 = User::create([
+            'username' => 'pasien2',
+            'password' => Hash::make('password'),
+            'role' => 'pasien',
+            'nama_lengkap' => 'Tn. Ferdy Rizkiawan',
+            'no_telp' => '081234567896',
+            'nik' => '12345678901234622',
+            'email' => 'pasien2@example.com',
+        ]);
+        $pasienUser3 = User::create([
+            'username' => 'pasien3',
+            'password' => Hash::make('password'),
+            'role' => 'pasien',
+            'nama_lengkap' => 'Tn Whilyan Pratama',
+            'no_telp' => '081234567896',
+            'nik' => '12345678901234623',
+            'email' => 'pasien3@example.com',
+        ]);
+        $pasienUser4 = User::create([
+            'username' => 'pasien4',
+            'password' => Hash::make('password'),
+            'role' => 'pasien',
+            'nama_lengkap' => 'Tn. HaidarDzaky',
+            'no_telp' => '081234567896',
+            'nik' => '12345678901234632',
+            'email' => 'pasien4@example.com',
         ]);
 
         // Create Pasien Profile
-        $pasien = Pasien::create([
-            'user_id' => $pasienUser->id,
+        $pasienUser1 = Pasien::create([
+            'user_id' => $pasienUser1->id,
             'tanggal_lahir' => '1990-01-01',
             'alamat' => 'Jl. Contoh No. 123, Kota Contoh',
-            'jenis_kelamin' => 'laki-laki',
+            'jenis_kelamin' => 'Perempuan',
             'golongan_darah' => 'O',
             'alergi' => 'Tidak ada',
         ]);
-    }
+        $pasienUser2 = Pasien::create([
+            'user_id' => $pasienUser2->id,
+            'tanggal_lahir' => '1990-01-01',
+            'alamat' => 'Jl. Contoh No. 123, Kota Contoh',
+            'jenis_kelamin' => 'Laki-laki',
+            'golongan_darah' => 'O',
+            'alergi' => 'Tidak ada',
+        ]);
+        $pasienUser3 = Pasien::create([
+            'user_id' => $pasienUser3->id,
+            'tanggal_lahir' => '1990-01-01',
+            'alamat' => 'Jl. Contoh No. 123, Kota Contoh',
+            'jenis_kelamin' => 'Laki-laki',
+            'golongan_darah' => 'O',
+            'alergi' => 'Tidak ada',
+        ]);
+        $pasienUser4 = Pasien::create([
+            'user_id' => $pasienUser4->id,
+            'tanggal_lahir' => '1990-01-01',
+            'alamat' => 'Jl. Contoh No. 123, Kota Contoh',
+            'jenis_kelamin' => 'Laki-laki',
+            'golongan_darah' => 'O',
+            'alergi' => 'Tidak ada',
+        ]);
+
+        $this->call([
+            JadwalDokterSeeder::class,
+        ]);
+    } 
 }

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->uuid('dokter_id');
             $table->string('kode_antrian');
             $table->integer('nomor_antrian');
-            $table->enum('status', ['menunggu', 'dipanggil', 'selesai', 'batal'])->default('menunggu');
+            $table->enum('status', ['menunggu', 'dipanggil', 'lewati', 'selesai', 'batal'])->default('menunggu');
             $table->timestamp('waktu_daftar');
             $table->timestamp('waktu_dipanggil')->nullable();
             $table->timestamp('waktu_selesai')->nullable();

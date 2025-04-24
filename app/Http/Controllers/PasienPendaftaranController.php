@@ -38,7 +38,7 @@ class PasienPendaftaranController
             'status_validasi' => 'menunggu'
         ]);
 
-        return redirect()->route('pendaftaran.status')->with('success', 'Pendaftaran berhasil, menunggu validasi.');
+        return redirect()->route('pasien.dashboard')->with('success', 'Pendaftaran berhasil, menunggu validasi.');
     }
 
     public function status()

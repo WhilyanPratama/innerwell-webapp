@@ -28,10 +28,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/pendaftaran/status', [PasienPendaftaranController::class, 'status'])->name('pendaftaran.status');
     Route::post('/resepsionis/dashboard/{pendaftaran}/validate', [ResepsionisDashboardController::class, 'validate'])->name('resepsionis.validate');
     Route::resource('jadwal', JadwalDokterController::class);
-    Route::get('/dokter/dashboard', [DokterDashboardController::class, 'index'])->name('dokter.dashboard');
     Route::get('/resepsionis/dashboard', [ResepsionisDashboardController::class, 'index'])->name('resepsionis.dashboard');
+    Route::get('/dokter/dashboard', [DokterDashboardController::class, 'index'])->name('dokter.dashboard');
     Route::post('/dokter/antrian/{antrian}/next', [DokterDashboardController::class, 'nextPatient'])->name('dokter.next');
     Route::post('/dokter/antrian/{antrian}/skip', [DokterDashboardController::class, 'skipPatient'])->name('dokter.skip');
+    Route::post('/dokter/antrian/{antrian}/process-skipped', [DokterDashboardController::class, 'processSkippedPatient'])->name('dokter.process-skipped');
+    Route::get('/dokter/medical-record/{pasien}', [DokterDashboardController::class, 'viewMedicalRecord'])->name('dokter.medical-record');
 });
 
 // Admin routes
@@ -45,6 +47,8 @@ Route::middleware('role:dokter')->group(function () {
     Route::get('/dokter/dashboard', [DokterDashboardController::class, 'index'])->name('dokter.dashboard');
     Route::post('/dokter/antrian/{antrian}/next', [DokterDashboardController::class, 'nextPatient'])->name('dokter.next');
     Route::post('/dokter/antrian/{antrian}/skip', [DokterDashboardController::class, 'skipPatient'])->name('dokter.skip');
+    Route::post('/dokter/antrian/{antrian}/process-skipped', [DokterDashboardController::class, 'processSkippedPatient'])->name('dokter.process-skipped');
+    Route::get('/dokter/medical-record/{pasien}', [DokterDashboardController::class, 'viewMedicalRecord'])->name('dokter.medical-record');
     
 });
 

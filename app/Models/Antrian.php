@@ -36,4 +36,9 @@ class Antrian extends Model
     {
         return $this->belongsTo(Dokter::class);
     }
+
+    public function rekamMedisDetail()
+    {
+        return $this->hasOne(RekamMedisDetail::class);
+    }
 }
