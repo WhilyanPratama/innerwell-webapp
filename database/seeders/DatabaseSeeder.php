@@ -277,8 +277,8 @@ class DatabaseSeeder extends Seeder
             'alergi' => 'Tidak ada',
         ]);
 
-        $this->call([
-            JadwalDokterSeeder::class,
-        ]);
+        // $this->call([
+        //     JadwalDokterSeeder::class,
+        // ]);
     } 
 }

@@ -1,39 +1,17 @@
 docker compose up -d
 
+composer install
 
-#install scantum : 
-
-composer require laravel/sanctum
-php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"
-
-php artisan migrate:fres
+php artisan migrate:fresh
 php artisan migrate
 php artisan db:seed
 
-
-role tinker :
-\App\Models\User::select('role')->distinct()->get();
-= Illuminate\Database\Eloquent\Collection {#1366
-    all: [
-      App\Models\User {#6263
-        role: "dokter",
-      },
-      App\Models\User {#6262
-        role: "pasien",
-      },
-      App\Models\User {#6265
-        role: "resepsionis",
-      },
-      App\Models\User {#6266
-        role: "manajemen",
-      },
-      App\Models\User {#6267
-        role: "admin",
-      },
-    ],
-  }
+//uncomment line 290 fungsi $this
+php artisan db:seed --class=JadwalDokterSeeder
 
 
+
+#kalau error bersihin cache pake berikut :
 php artisan route:cache
 php artisan config:cache
 
