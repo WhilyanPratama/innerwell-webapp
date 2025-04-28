@@ -7,11 +7,14 @@ use App\Http\Controllers\ResepsionisDashboardController;
 use App\Http\Controllers\PasienPendaftaranController;
 use App\Http\Controllers\DokterDashboardController;
 use App\Http\Controllers\PasienDashboardController;
+use App\Http\Controllers\AntrianBoardController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('home');
 });
+
+Route::get('/antrian/board/{poli}', [AntrianBoardController::class, 'index'])->name('antrian.board');
 
 Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
@@ -34,6 +37,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/dokter/antrian/{antrian}/skip', [DokterDashboardController::class, 'skipPatient'])->name('dokter.skip');
     Route::post('/dokter/antrian/{antrian}/process-skipped', [DokterDashboardController::class, 'processSkippedPatient'])->name('dokter.process-skipped');
     Route::get('/dokter/medical-record/{pasien}', [DokterDashboardController::class, 'viewMedicalRecord'])->name('dokter.medical-record');
+
 });
 
 // Admin routes
@@ -59,6 +63,7 @@ Route::middleware('role:pasien')->group(function () {
     Route::post('/pendaftaran', [PasienPendaftaranController::class, 'store'])->name('pendaftaran.store');
     Route::get('/pendaftaran/jadwal-dokter', [PasienPendaftaranController::class, 'getJadwalDokter'])->name('pendaftaran.jadwal-dokter');
     Route::get('/pendaftaran/status', [PasienPendaftaranController::class, 'status'])->name('pendaftaran.status');
+    Route::get('/antrian/board/{poli}', [AntrianBoardController::class, 'index'])->name('antrian.board');
 });
 
 // Manajemen routes

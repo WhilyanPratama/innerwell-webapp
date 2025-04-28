@@ -33,7 +33,8 @@ class DokterDashboardController
         
         // Get antrians for the selected date
         $menungguAntrians = Antrian::where('dokter_id', $dokter->id)
-            ->whereDate('created_at', $selectedDate)
+            ->whereHas('Pendaftaran', function ($query) use ($selectedDate) {
+                $query->whereDate('tanggal_berobat', $selectedDate);            })
             ->where('status', 'menunggu')
             ->with(['pendaftaran.pasien.user', 'pendaftaran.poli'])
             ->orderBy('nomor_antrian')
@@ -92,6 +93,25 @@ class DokterDashboardController
             'obat' => $request->obat,
         ]);
 
+        // Get Next Antrian
+
+        $nextAntrian = Antrian::where('dokter_id', $antrian->dokter_id)
+        ->whereHas('pendaftaran', function($query) use ($antrian) {
+            $query->whereDate('tanggal_berobat', $antrian->pendaftaran->tanggal_berobat);
+        })
+            ->where('status', 'menunggu')
+            ->orderBy('nomor_antrian')
+            ->first();
+
+
+        // Broadcast Event untuk update antrian
+        event(new \App\Events\AntrianUpdated(
+            $antrian->pendaftaran->poli_id,
+            $antrian->kode_antrian,
+            $nextAntrian ? $nextAntrian->kode_antrian : null,
+            $antrian->pendaftaran->tanggal_berobat
+        ));
+        
         return redirect()->route('dokter.dashboard')
             ->with('success', 'Pasien selesai diperiksa dan rekam medis telah diperbarui');
     }

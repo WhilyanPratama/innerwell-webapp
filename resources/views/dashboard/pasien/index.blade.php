@@ -388,4 +388,34 @@
     </script>
 
 </body>
+<!-- Board Antrian (Simple Version) -->
+@if(isset($antrianData))
+    <div class="bg-white p-6 rounded-lg shadow-md mt-8">
+        <h2 class="text-xl font-semibold mb-4">Status Antrian {{ $antrianData['poli']->nama_poli }}</h2>
+        
+        <table class="w-full border-collapse border border-gray-300">
+            <tr class="bg-gray-100">
+                <th class="border border-gray-300 p-2">Antrian Saat Ini</th>
+                <th class="border border-gray-300 p-2">Antrian Berikutnya</th>
+                <th class="border border-gray-300 p-2">Antrian Anda</th>
+                <th class="border border-gray-300 p-2">Estimasi Waktu</th>
+            </tr>
+            <tr class="text-center">
+                <td class="border border-gray-300 p-3" id="current-antrian">{{ $antrianData['currentAntrian'] }}</td>
+                <td class="border border-gray-300 p-3" id="next-antrian">{{ $antrianData['nextAntrian'] }}</td>
+                <td class="border border-gray-300 p-3" id="your-antrian">{{ $antrianData['yourAntrian'] }}</td>
+                <td class="border border-gray-300 p-3" id="wait-time">
+                    @if(is_numeric($antrianData['estimatedWait']))
+                        {{ $antrianData['estimatedWait'] }} menit
+                    @else
+                        {{ $antrianData['estimatedWait'] }}
+                    @endif
+                </td>
+            </tr>
+        </table>
+        
+        <p class="mt-4 text-sm text-gray-600">Status antrian diperbarui secara otomatis. Harap tetap memperhatikan nomor antrian Anda.</p>
+    </div>
+@endif
+
 </html>
