@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html lang="id" class="scroll-smooth">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>InnerWell Klinic</title>
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link rel="shortcut icon" type="image/png" href="images/favicon.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -78,35 +81,18 @@
                             InnerWell Klinic adalah solusi layanan kesehatan modern yang mengedepankan kemudahan dan kenyamanan pasien. Kami menyediakan sistem pendaftaran online, manajemen antrian terintegrasi, serta pencatatan medis yang akurat untuk memastikan setiap pasien mendapatkan perawatan tepat waktu. Dengan tim medis profesional dan teknologi terkini, kami berkomitmen menghadirkan pengalaman pelayanan kesehatan yang aman, efisien, dan transparan bagi seluruh lapisan masyarakat.
                         </p>
                         @auth
-                            <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-11 px-8 py-3 bg-green-600 hover:bg-green-700 text-white transition-all duration-200 hover:shadow-lg">
+                            <a href="{{ route(auth()->user()->role . '.dashboard') }}" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-11 px-8 py-3 bg-green-600 hover:bg-green-700 text-white transition-all duration-200 hover:shadow-lg">
                                 Kembali Ke Dashboard
-                            </button>
+                            </a>
                         @else
+
                             <a href="{{ route('register') }}" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-11 px-8 py-3 bg-green-600 hover:bg-green-700 text-white transition-all duration-200 hover:shadow-lg">
                                 Daftar Sekarang
                             </a>
                         @endauth
                     </div>
-
-                    <div class="flex justify-center items-center bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl shadow-md aspect-video md:aspect-square p-6">
-                        <div class="text-gray-500 text-center">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="h-16 w-16 text-gray-400 mx-auto mb-4"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                stroke-width="1"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                                />
-                            </svg>
-                            <p class="font-medium">[Gambar tim medis berdiskusi]</p>
-                            <span class="text-sm text-gray-400">(Placeholder)</span>
-                        </div>
+                    <div class="flex justify-center items-center rounded-xl overflow-hidden h-full">
+                        <img src="{{ asset('images/landing-page-photo1.jpg') }}" alt="Tim medis berdiskusi" class="w-full h-full object-cover">
                     </div>
                 </div>
             </div>
@@ -123,25 +109,8 @@
                     </h3>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-20 items-center">
-                    <div class="order-2 md:order-1 flex justify-center items-center bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl shadow-md aspect-video md:aspect-[4/3] p-6">
-                        <div class="text-gray-500 text-center">
-                             <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="h-16 w-16 text-gray-400 mx-auto mb-4"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                stroke-width="1"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                                />
-                            </svg>
-                            <p class="font-medium">[Gambar ilustrasi pasien]</p>
-                            <span class="text-sm text-gray-400">(Placeholder)</span>
-                        </div>
+                    <div class="order-2 md:order-1 flex justify-center items-center rounded-xl overflow-hidden h-full">
+                        <img src="{{ asset('images/landing-page-photo2.jpg') }}" alt="Tim medis berdiskusi" class="w-full h-full object-cover">
                     </div>
 
                     <div class="order-1 md:order-2 md:pl-8 space-y-5 text-gray-700 text-base leading-relaxed">
