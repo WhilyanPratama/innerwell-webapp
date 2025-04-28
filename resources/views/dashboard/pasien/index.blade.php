@@ -137,14 +137,28 @@
                             Pendaftaran Berobat
                         </h2>
 
-                        <div class="mb-6 p-4 bg-white-100 border border-gray-200 rounded-md text-sm text-gray-700 space-y-1">
-                            <p><span class="font-medium text-green-600">Nama :</span class="font-medium text-green-600"> {{ Auth::user()->nama_lengkap ?? 'N/A' }}</p>
-                            <p><span class="font-medium text-green-600">NIK :</span> {{ Auth::user()->nik ?? 'N/A' }}</p>
-                            @isset($pasien)
-                                <p><span class="font-medium text-green-600">Tanggal Lahir :</span> {{ $pasien->tanggal_lahir ? \Carbon\Carbon::parse($pasien->tanggal_lahir)->isoFormat('D MMMM YYYY') : 'N/A' }}</p>
-                            @else
-                                <p><span class="font-medium text-green-600">Tanggal Lahir :</span> (Data tidak tersedia)</p>
-                            @endisset
+                        <div class="mb-6 p-4 bg-white-100 border border-gray-200 rounded-md text-sm text-gray-700 space-y-3 w-full md:col-span-2">
+                            <div class="grid grid-cols-1 gap-2">
+                                <p class="flex justify-between">
+                                    <span class="font-medium text-green-600 w-32">Nama</span>
+                                    <span class="flex-grow">: {{ Auth::user()->nama_lengkap ?? 'N/A' }}</span>
+                                </p>
+                                <p class="flex justify-between">
+                                    <span class="font-medium text-green-600 w-32">NIK</span>
+                                    <span class="flex-grow">: {{ Auth::user()->nik ?? 'N/A' }}</span>
+                                </p>
+                                @isset($pasien)
+                                    <p class="flex justify-between">
+                                        <span class="font-medium text-green-600 w-32">Tanggal Lahir</span>
+                                        <span class="flex-grow">: {{ $pasien->tanggal_lahir ? \Carbon\Carbon::parse($pasien->tanggal_lahir)->isoFormat('D MMMM YYYY') : 'N/A' }}</span>
+                                    </p>
+                                @else
+                                    <p class="flex justify-between">
+                                        <span class="font-medium text-green-600 w-32">Tanggal Lahir</span>
+                                        <span class="flex-grow">: (Data tidak tersedia)</span>
+                                    </p>
+                                @endisset
+                            </div>
                         </div>
 
                         <form method="POST" action="{{ route('pendaftaran.store') }}">
@@ -184,9 +198,10 @@
                                 </div>
 
                                 <div>
-                                    <input type="date" name="tanggal_berobat" id="tanggal_berobat" value="{{ old('tanggal_berobat') }}" class="{{ $inputClass }} text-gray-700" required placeholder="Tanggal Berobat">
+                                    <input type="date" name="tanggal_berobat" id="tanggal_berobat" value="{{ old('tanggal_berobat') }}" class="{{ $inputClass }} text-gray-700" min="{{ date('Y-m-d') }}" max="{{ date('Y-m-d', strtotime('+14 days')) }}" required placeholder="Tanggal Berobat">
                                     @error('tanggal_berobat') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                                 </div>
+
 
                                 <div class="md:col-span-2">
                                     <select name="jadwal_dokter_id" id="jadwal_dokter_id" class="{{ $selectClass }}" required disabled>
@@ -445,34 +460,5 @@
 
     </script>
 </body>
-<!-- Board Antrian (Simple Version) -->
-@if(isset($antrianData))
-    <div class="bg-white p-6 rounded-lg shadow-md mt-8">
-        <h2 class="text-xl font-semibold mb-4">Status Antrian {{ $antrianData['poli']->nama_poli }}</h2>
-        
-        <table class="w-full border-collapse border border-gray-300">
-            <tr class="bg-gray-100">
-                <th class="border border-gray-300 p-2">Antrian Saat Ini</th>
-                <th class="border border-gray-300 p-2">Antrian Berikutnya</th>
-                <th class="border border-gray-300 p-2">Antrian Anda</th>
-                <th class="border border-gray-300 p-2">Estimasi Waktu</th>
-            </tr>
-            <tr class="text-center">
-                <td class="border border-gray-300 p-3" id="current-antrian">{{ $antrianData['currentAntrian'] }}</td>
-                <td class="border border-gray-300 p-3" id="next-antrian">{{ $antrianData['nextAntrian'] }}</td>
-                <td class="border border-gray-300 p-3" id="your-antrian">{{ $antrianData['yourAntrian'] }}</td>
-                <td class="border border-gray-300 p-3" id="wait-time">
-                    @if(is_numeric($antrianData['estimatedWait']))
-                        {{ $antrianData['estimatedWait'] }} menit
-                    @else
-                        {{ $antrianData['estimatedWait'] }}
-                    @endif
-                </td>
-            </tr>
-        </table>
-        
-        <p class="mt-4 text-sm text-gray-600">Status antrian diperbarui secara otomatis. Harap tetap memperhatikan nomor antrian Anda.</p>
-    </div>
-@endif
 
 </html>

@@ -271,13 +271,13 @@
                                                         <button type="submit" class="button-selesai">
                                                             Selesai
                                                         </button>
-                                                        <form action="{{ route('dokter.skip', $antrian->id) }}" method="POST" class="inline">
-                                                            @csrf
-                                                            <button type="submit" class="button-lewati">
-                                                                Lewati
-                                                            </button>
-                                                        </form>
                                                     </div>
+                                                </form>
+                                                <form action="{{ route('dokter.skip', $antrian->id) }}" method="POST" class="inline mt-2">
+                                                    @csrf
+                                                    <button type="submit" class="button-lewati">
+                                                        Lewati
+                                                    </button>
                                                 </form>
                                             </td>
                                         </tr>

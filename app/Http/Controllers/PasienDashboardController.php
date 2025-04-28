@@ -58,7 +58,7 @@ class PasienDashboardController
             if ($currentAntrian && $pendaftaran->antrian->status === 'menunggu') {
                 $waitingCount = $pendaftaran->antrian->nomor_antrian - $currentAntrian->nomor_antrian;
                 if ($waitingCount > 0) {
-                    $estimatedWait = $waitingCount * 10; // Assuming 10 minutes per patient
+                    $estimatedWait = $waitingCount * 6; // Assuming 6 minutes per patient
                 } else if ($waitingCount === 0) {
                     $estimatedWait = 'Anda Sekarang!';
                 }
