@@ -18,8 +18,8 @@ return new class extends Migration
             $table->enum('role', ['pasien', 'dokter', 'resepsionis', 'admin', 'manajemen']);
             $table->string('nama_lengkap');
             $table->string('no_telp')->nullable();
-            $table->string('nik')->unique();
-            $table->string('email')->unique();
+            $table->string('nik')->nullable();
+            $table->string('email')->nullable();
             $table->timestamps();
         });
     }
