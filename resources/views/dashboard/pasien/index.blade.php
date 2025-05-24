@@ -60,10 +60,16 @@
             transition: margin-left 0.3s ease-in-out;
         }
         .sidebar-open #main-content, .sidebar-open #header {
-            margin-left: 16rem;
+            margin-left: 16rem; /* 64 * 0.25rem = 16rem */
         }
         #header > div {
              max-width: 100%;
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
         }
 
     </style>
@@ -88,11 +94,19 @@
             <div class="flex-grow p-4">
                 <ul class="space-y-2">
                     <li>
-                        <a href="#" class="flex items-center space-x-3 px-4 py-2 rounded-md bg-white bg-opacity-20 text-white font-medium hover:bg-opacity-30 transition duration-150">
+                        <a href="#" id="dashboard-utama-link" class="sidebar-link flex items-center space-x-3 px-4 py-2 rounded-md bg-white bg-opacity-20 text-white font-medium hover:bg-opacity-30 transition duration-150 group">
                             <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                             <span>Dashboard Utama</span>
                         </a>
                     </li>
+                    <li>
+                        <a href="#" id="pembayaran-link" id="dashboard-utama-link" class="sidebar-link flex items-center space-x-3 px-4 py-2 rounded-md bg-white bg-opacity-20 text-white font-medium hover:bg-opacity-30 transition duration-150 group">
+                        <svg class="h-5 w-5 text-white group-hover:text-white transition-colors duration-150" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                        </svg>
+                            <span>Pembayaran</span>
+                        </a>
+                    <li>
                 </ul>
             </div>
 
@@ -121,7 +135,7 @@
                                   <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
                                   <path d="M3.22 12H9.5l.7-1.44 2.1 4.24 1.4-2.82h4.78"/>
                               </svg>
-                             <span class="text-xl font-semibold hidden sm:inline">InnerWell Klinic - Pasien</span>
+                             <span class="text-xl font-semibold hidden sm:inline">InnerWell Klinic | Pasien</span>
                          </div>
                      </div>
 
@@ -134,10 +148,11 @@
             <main id="main-content" class="flex-1 pt-20 pb-8">
                 <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
 
-                    <div class="bg-white p-6 md:p-8 rounded-lg shadow-md mb-8">
-                        <h2 class="text-xl md:text-2xl font-semibold text-gray-800 mb-6">
-                            Pendaftaran Berobat
-                        </h2>
+                    <div id="dashboard-content" class="content-section active">
+                        <div id="pendaftaran-berobat-section" class="bg-white p-6 md:p-8 rounded-lg shadow-md mb-8">
+                            <h2 class="text-xl md:text-2xl font-semibold text-gray-800 mb-6">
+                                Pendaftaran Berobat
+                            </h2>
 
                         <div class="mb-6 p-4 bg-white-100 border border-gray-200 rounded-md text-sm text-gray-700 space-y-3 w-full md:col-span-2">
                             <div class="grid grid-cols-1 gap-2">
@@ -163,179 +178,191 @@
                             </div>
                         </div>
 
-                        <form method="POST" action="{{ route('pendaftaran.store') }}">
-                            @csrf
+                            <form method="POST" action="{{ route('pendaftaran.store') }}">
+                                @csrf
 
-                            @if ($errors->any())
-                                <div class="mb-4 p-4 bg-red-100 border border-red-300 text-red-700 rounded-md text-sm">
-                                    <p class="font-medium mb-1">Harap perbaiki error berikut:</p>
-                                    <ul class="list-disc list-inside">
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif
-
-                            @php
-                                $inputClass = "w-full px-4 py-3 bg-white text-gray-800 rounded-lg border border-gray-300 focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 transition duration-150 ease-in-out placeholder-gray-400";
-                                $selectClass = $inputClass . " appearance-none";
-                            @endphp
-
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5 mb-6">
-                                <div>
-                                    <select name="poli_id" id="poli_id" class="{{ $selectClass }}" required>
-                                        <option value="" disabled {{ old('poli_id') ? '' : 'selected' }}>Pilih Poli</option>
-                                        @isset($polis)
-                                            @foreach($polis as $poli)
-                                                <option value="{{ $poli->id }}" {{ old('poli_id') == $poli->id ? 'selected' : '' }}>
-                                                    {{ $poli->nama_poli }}
-                                                </option>
+                                @if ($errors->any())
+                                    <div class="mb-4 p-4 bg-red-100 border border-red-300 text-red-700 rounded-md text-sm">
+                                        <p class="font-medium mb-1">Harap perbaiki error berikut:</p>
+                                        <ul class="list-disc list-inside">
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
                                             @endforeach
-                                        @else
-                                             <option value="" disabled>Data poli tidak tersedia</option>
-                                        @endisset
-                                    </select>
-                                    @error('poli_id') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                                </div>
-
-                                <div>
-                                    <input type="date" name="tanggal_berobat" id="tanggal_berobat" value="{{ old('tanggal_berobat') }}" class="{{ $inputClass }} text-gray-700" min="{{ date('Y-m-d') }}" max="{{ date('Y-m-d', strtotime('+14 days')) }}" required placeholder="Tanggal Berobat">
-                                    @error('tanggal_berobat') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                                </div>
-
-
-                                <div class="md:col-span-2">
-                                    <select name="jadwal_dokter_id" id="jadwal_dokter_id" class="{{ $selectClass }}" required disabled>
-                                        <option value="" selected>Pilih Tanggal Dan Poli</option>
-                                    </select>
-                                    <div id="jadwal-loading" class="text-sm text-gray-500 mt-1" style="display: none;">Memuat jadwal...</div>
-                                    @error('jadwal_dokter_id') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                                </div>
-
-                                <div class="md:col-span-2">
-                                    <textarea id="keluhan" name="keluhan" class="{{ $inputClass }}" rows="4" required placeholder="Keluhan Anda">{{ old('keluhan') }}</textarea>
-                                    @error('keluhan') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                                </div>
-                            </div>
-
-                            <div class="flex justify-center pt-2">
-                                <button type="submit" class="px-10 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-all duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                                    Daftar
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-
-                    <div class="bg-white p-6 md:p-8 rounded-lg shadow-md">
-                        <h2 class="text-xl md:text-2xl font-semibold text-gray-800 mb-6">Status Pendaftaran Terakhir</h2>
-
-                        @isset($pendaftaran)
-                            <div class="bg-gray-50 border border-gray-200 rounded-lg p-6">
-                                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-4 text-sm">
-                                    <div>
-                                        <p class="text-gray-500 mb-1">Status Pendaftaran</p>
-                                         @php
-                                             $statusText = match ($pendaftaran->status_validasi) {
-                                                 'menunggu' => 'Menunggu Validasi',
-                                                 'disetujui' => 'Disetujui',
-                                                 'ditolak' => 'Ditolak',
-                                                 default => ucfirst($pendaftaran->status_validasi),
-                                             };
-                                             $statusColor = match ($pendaftaran->status_validasi) {
-                                                 'menunggu' => 'text-yellow-600',
-                                                 'disetujui' => 'text-green-600',
-                                                 'ditolak' => 'text-red-600',
-                                                 default => 'text-gray-800',
-                                             };
-                                         @endphp
-                                        <p class="font-medium {{ $statusColor }}">{{ $statusText }}</p>
+                                        </ul>
                                     </div>
+                                @endif
+
+                                @php
+                                    $inputClass = "w-full px-4 py-3 bg-white text-gray-800 rounded-lg border border-gray-300 focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 transition duration-150 ease-in-out placeholder-gray-400";
+                                    $selectClass = $inputClass . " appearance-none";
+                                @endphp
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5 mb-6">
                                     <div>
-                                        <p class="text-gray-500 mb-1">Posisi Antrian</p>
-                                        <p class="font-medium text-gray-800">
-                                            @if($pendaftaran->status_validasi === 'disetujui' && isset($pendaftaran->antrian))
-                                                {{ $pendaftaran->antrian->kode_antrian ?? 'N/A' }} ({{ ucfirst($pendaftaran->antrian->status ?? 'N/A') }})
-                                            @elseif($pendaftaran->status_validasi === 'menunggu')
-                                                {{ $waitingPosition ?? 'Menunggu Validasi' }}
+                                        <select name="poli_id" id="poli_id" class="{{ $selectClass }}" required>
+                                            <option value="" disabled {{ old('poli_id') ? '' : 'selected' }}>Pilih Poli</option>
+                                            @isset($polis)
+                                                @foreach($polis as $poli)
+                                                    <option value="{{ $poli->id }}" {{ old('poli_id') == $poli->id ? 'selected' : '' }}>
+                                                        {{ $poli->nama_poli }}
+                                                    </option>
+                                                @endforeach
                                             @else
-                                                -
-                                            @endif
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <p class="text-gray-500 mb-1">Poli</p>
-                                        <p class="font-medium text-gray-800">{{ $pendaftaran->poli->nama_poli ?? 'N/A' }}</p>
+                                                 <option value="" disabled>Data poli tidak tersedia</option>
+                                            @endisset
+                                        </select>
+                                        @error('poli_id') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                                     </div>
 
                                     <div>
-                                        <p class="text-gray-500 mb-1">Tanggal Berobat</p>
-                                        <p class="font-medium text-gray-800">{{ $pendaftaran->tanggal_berobat ? \Carbon\Carbon::parse($pendaftaran->tanggal_berobat)->isoFormat('dddd, D MMM YYYY') : 'N/A' }}</p>
+                                        <input type="date" name="tanggal_berobat" id="tanggal_berobat" value="{{ old('tanggal_berobat') }}" class="{{ $inputClass }} text-gray-700" min="{{ date('Y-m-d') }}" max="{{ date('Y-m-d', strtotime('+14 days')) }}" required placeholder="Tanggal Berobat">
+                                        @error('tanggal_berobat') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                                     </div>
+
+
                                     <div class="md:col-span-2">
-                                        <p class="text-gray-500 mb-1">Dokter</p>
-                                        <p class="font-medium text-gray-800">{{ $pendaftaran->jadwalDokter->dokter->user->nama_lengkap ?? 'N/A' }}</p>
+                                        <select name="jadwal_dokter_id" id="jadwal_dokter_id" class="{{ $selectClass }}" required disabled>
+                                            <option value="" selected>Pilih Tanggal Dan Poli</option>
+                                        </select>
+                                        <div id="jadwal-loading" class="text-sm text-gray-500 mt-1" style="display: none;">Memuat jadwal...</div>
+                                        @error('jadwal_dokter_id') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                                     </div>
 
-                                     @if($pendaftaran->status_validasi === 'ditolak' && $pendaftaran->catatan_validasi)
-                                        <div class="sm:col-span-2 md:col-span-3 mt-2">
-                                            <p class="text-gray-500 mb-1">Catatan Penolakan</p>
-                                            <p class="text-sm text-red-700">{{ $pendaftaran->catatan_validasi }}</p>
-                                        </div>
-                                     @endif
+                                    <div class="md:col-span-2">
+                                        <textarea id="keluhan" name="keluhan" class="{{ $inputClass }}" rows="4" required placeholder="Keluhan Anda">{{ old('keluhan') }}</textarea>
+                                        @error('keluhan') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                                    </div>
+                                </div>
 
-                                     @if($pendaftaran->status_validasi === 'disetujui')
-                                        <div class="sm:col-span-2 md:col-span-3 mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
-                                            <div class="flex items-start">
-                                                <svg class="h-5 w-5 text-blue-500 mt-0.5 mr-2 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                                                     <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
-                                                </svg>
-                                                <p class="text-xs text-blue-800">
-                                                    Silakan datang ke klinik 15 menit sebelum waktu pemeriksaan Anda. Jika nomor antrian Anda terlewat, harap segera menghubungi petugas di lokasi.
-                                                </p>
-                                            </div>
+                                <div class="flex justify-center pt-2">
+                                    <button type="submit" class="px-10 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-all duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                        Daftar
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div id="status-pendaftaran-section" class="bg-white p-6 md:p-8 rounded-lg shadow-md">
+                            <h2 class="text-xl md:text-2xl font-semibold text-gray-800 mb-6">Status Pendaftaran Terakhir</h2>
+
+                            @isset($pendaftaran)
+                                <div class="bg-gray-50 border border-gray-200 rounded-lg p-6">
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-4 text-sm">
+                                        <div>
+                                            <p class="text-gray-500 mb-1">Status Pendaftaran</p>
+                                             @php
+                                                 $statusText = match ($pendaftaran->status_validasi) {
+                                                     'menunggu' => 'Menunggu Validasi',
+                                                     'disetujui' => 'Disetujui',
+                                                     'ditolak' => 'Ditolak',
+                                                     default => ucfirst($pendaftaran->status_validasi),
+                                                 };
+                                                 $statusColor = match ($pendaftaran->status_validasi) {
+                                                     'menunggu' => 'text-yellow-600',
+                                                     'disetujui' => 'text-green-600',
+                                                     'ditolak' => 'text-red-600',
+                                                     default => 'text-gray-800',
+                                                 };
+                                             @endphp
+                                            <p class="font-medium {{ $statusColor }}">{{ $statusText }}</p>
                                         </div>
-                                     @endif
+                                        <div>
+                                            <p class="text-gray-500 mb-1">Posisi Antrian</p>
+                                            <p class="font-medium text-gray-800">
+                                                @if($pendaftaran->status_validasi === 'disetujui' && isset($pendaftaran->antrian))
+                                                    {{ $pendaftaran->antrian->kode_antrian ?? 'N/A' }} ({{ ucfirst($pendaftaran->antrian->status ?? 'N/A') }})
+                                                @elseif($pendaftaran->status_validasi === 'menunggu')
+                                                    {{ $waitingPosition ?? 'Menunggu Validasi' }}
+                                                @else
+                                                    -
+                                                @endif
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <p class="text-gray-500 mb-1">Poli</p>
+                                            <p class="font-medium text-gray-800">{{ $pendaftaran->poli->nama_poli ?? 'N/A' }}</p>
+                                        </div>
+
+                                        <div>
+                                            <p class="text-gray-500 mb-1">Tanggal Berobat</p>
+                                            <p class="font-medium text-gray-800">{{ $pendaftaran->tanggal_berobat ? \Carbon\Carbon::parse($pendaftaran->tanggal_berobat)->isoFormat('dddd, D MMMM Gł') : 'N/A' }}</p>
+                                        </div>
+                                        <div class="md:col-span-2">
+                                            <p class="text-gray-500 mb-1">Dokter</p>
+                                            <p class="font-medium text-gray-800">{{ $pendaftaran->jadwalDokter->dokter->user->nama_lengkap ?? 'N/A' }}</p>
+                                        </div>
+
+                                         @if($pendaftaran->status_validasi === 'ditolak' && $pendaftaran->catatan_validasi)
+                                            <div class="sm:col-span-2 md:col-span-3 mt-2">
+                                                <p class="text-gray-500 mb-1">Catatan Penolakan</p>
+                                                <p class="text-sm text-red-700">{{ $pendaftaran->catatan_validasi }}</p>
+                                            </div>
+                                         @endif
+
+                                         @if($pendaftaran->status_validasi === 'disetujui')
+                                            <div class="sm:col-span-2 md:col-span-3 mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                                                <div class="flex items-start">
+                                                    <svg class="h-5 w-5 text-blue-500 mt-0.5 mr-2 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                                                         <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                                                    </svg>
+                                                    <p class="text-xs text-blue-800">
+                                                        Silakan datang ke klinik 15 menit sebelum waktu pemeriksaan Anda. Jika nomor antrian Anda terlewat, harap segera menghubungi petugas di lokasi.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                         @endif
+                                    </div>
+                                </div>
+                            @else
+                                <div class="text-center text-gray-500 py-6 border border-dashed rounded-lg">
+                                    <p>Tidak ada data pendaftaran terakhir.</p>
+                                </div>
+                            @endisset
+                        </div>
+                        @if(isset($antrianData))
+                            <div id="status-antrian-section" class="bg-white p-6 rounded-lg shadow-md mt-12 mb-8">
+                                <div class="border-b border-gray-200 pb-4 mb-6">
+                                    <h2 class="text-xl font-semibold text-gray-800">Status Antrian {{ $antrianData['poli']->nama_poli }}</h2>
+                                </div>
+                                
+                                <table class="w-full border-collapse border border-gray-300">
+                                    <tr class="bg-gray-100">
+                                        <th class="border border-gray-300 p-3 text-gray-700">Antrian Saat Ini</th>
+                                        <th class="border border-gray-300 p-3 text-gray-700">Antrian Berikutnya</th>
+                                        <th class="border border-gray-300 p-3 text-gray-700">Antrian Anda</th>
+                                        <th class="border border-gray-300 p-3 text-gray-700">Estimasi Waktu</th>
+                                    </tr>
+                                    <tr class="text-center">
+                                        <td class="border border-gray-300 p-4 text-lg font-medium" id="current-antrian">{{ $antrianData['currentAntrian'] }}</td>
+                                        <td class="border border-gray-300 p-4 text-lg font-medium" id="next-antrian">{{ $antrianData['nextAntrian'] }}</td>
+                                        <td class="border border-gray-300 p-4 text-lg font-medium" id="your-antrian">{{ $antrianData['yourAntrian'] }}</td>
+                                        <td class="border border-gray-300 p-4 text-lg font-medium" id="wait-time">
+                                            @if(is_numeric($antrianData['estimatedWait']))
+                                                {{ $antrianData['estimatedWait'] }} menit
+                                            @else
+                                                {{ $antrianData['estimatedWait'] }}
+                                            @endif
+                                        </td>
+                                    </tr>
+                                </table>
+                                
+                                <div class="mt-6 text-sm text-gray-600 bg-blue-50 p-4 rounded-md">
+                                    <p>Status antrian diperbarui secara otomatis. Harap tetap memperhatikan nomor antrian Anda.</p>
                                 </div>
                             </div>
-                        @else
-                            <div class="text-center text-gray-500 py-6 border border-dashed rounded-lg">
-                                <p>Tidak ada data pendaftaran terakhir.</p>
-                            </div>
-                        @endisset
+                        @endif
                     </div>
-                    @if(isset($antrianData))
-                        <div class="bg-white p-6 rounded-lg shadow-md mt-12 mb-8">
-                            <div class="border-b border-gray-200 pb-4 mb-6">
-                                <h2 class="text-xl font-semibold text-gray-800">Status Antrian {{ $antrianData['poli']->nama_poli }}</h2>
-                            </div>
-                            
-                            <table class="w-full border-collapse border border-gray-300">
-                                <tr class="bg-gray-100">
-                                    <th class="border border-gray-300 p-3 text-gray-700">Antrian Saat Ini</th>
-                                    <th class="border border-gray-300 p-3 text-gray-700">Antrian Berikutnya</th>
-                                    <th class="border border-gray-300 p-3 text-gray-700">Antrian Anda</th>
-                                    <th class="border border-gray-300 p-3 text-gray-700">Estimasi Waktu</th>
-                                </tr>
-                                <tr class="text-center">
-                                    <td class="border border-gray-300 p-4 text-lg font-medium" id="current-antrian">{{ $antrianData['currentAntrian'] }}</td>
-                                    <td class="border border-gray-300 p-4 text-lg font-medium" id="next-antrian">{{ $antrianData['nextAntrian'] }}</td>
-                                    <td class="border border-gray-300 p-4 text-lg font-medium" id="your-antrian">{{ $antrianData['yourAntrian'] }}</td>
-                                    <td class="border border-gray-300 p-4 text-lg font-medium" id="wait-time">
-                                        @if(is_numeric($antrianData['estimatedWait']))
-                                            {{ $antrianData['estimatedWait'] }} menit
-                                        @else
-                                            {{ $antrianData['estimatedWait'] }}
-                                        @endif
-                                    </td>
-                                </tr>
-                            </table>
-                            
-                            <div class="mt-6 text-sm text-gray-600 bg-blue-50 p-4 rounded-md">
-                                <p>Status antrian diperbarui secara otomatis. Harap tetap memperhatikan nomor antrian Anda.</p>
-                            </div>
+
+                    <div id="pembayaran-page-content" class="content-section">
+                        <div class="bg-white p-6 md:p-8 rounded-lg shadow-md min-h-[calc(100vh-10rem)] flex flex-col justify-center items-center">
+                            <svg class="h-20 w-20 text-green-500 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                            </svg>
+                            <h2 class="text-3xl font-semibold text-gray-800 mb-4">Segera Hadir!</h2>
+                            <p class="text-gray-600 text-lg text-center max-w-md">Fitur pembayaran sedang dalam tahap akhir pengembangan dan akan segera dapat digunakan</p>
                         </div>
-                    @endif
+                    </div>
 
                 </div>
             </main>
@@ -460,7 +487,45 @@
             }
         }
 
+        const dashboardUtamaLink = document.getElementById('dashboard-utama-link');
+        const pembayaranLink = document.getElementById('pembayaran-link');
+        const dashboardContent = document.getElementById('dashboard-content');
+        const pembayaranPageContent = document.getElementById('pembayaran-page-content');
+        const sidebarLinks = document.querySelectorAll('.sidebar-link');
+
+        function setActiveLink(activeLink) {
+            sidebarLinks.forEach(link => {
+                link.classList.remove('bg-white', 'bg-opacity-20', 'font-medium');
+                link.classList.add('text-white', 'hover:bg-white', 'hover:bg-opacity-20');
+            });
+            activeLink.classList.add('bg-white', 'bg-opacity-20', 'font-medium');
+            activeLink.classList.remove('hover:bg-opacity-20'); // Agar tidak ada double hover effect
+        }
+
+
+        if (dashboardUtamaLink && pembayaranLink && dashboardContent && pembayaranPageContent) {
+            dashboardUtamaLink.addEventListener('click', function(event) {
+                event.preventDefault();
+                dashboardContent.classList.add('active');
+                pembayaranPageContent.classList.remove('active');
+                setActiveLink(dashboardUtamaLink);
+                 if (window.innerWidth < 768 && bodyContainer.classList.contains('sidebar-open')) {
+                    toggleSidebar();
+                }
+            });
+
+            pembayaranLink.addEventListener('click', function(event) {
+                event.preventDefault();
+                dashboardContent.classList.remove('active');
+                pembayaranPageContent.classList.add('active');
+                setActiveLink(pembayaranLink);
+                if (window.innerWidth < 768 && bodyContainer.classList.contains('sidebar-open')) {
+                    toggleSidebar();
+                }
+            });
+            setActiveLink(dashboardUtamaLink);
+        }
+
     </script>
 </body>
-
 </html>
