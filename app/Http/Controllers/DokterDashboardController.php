@@ -6,6 +6,7 @@ use App\Models\Antrian;
 use App\Models\Pasien;
 use App\Models\RekamMedis;
 use App\Models\RekamMedisDetail;
+use App\Models\Medicine;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,6 +31,17 @@ class DokterDashboardController
                 'formatted' => $date->format('d M Y')
             ];
         }
+
+        $medicinesQuery = Medicine::query();
+    
+        if ($request->search) {
+            $medicinesQuery->where(function($query) use ($request) {
+                $query->where('nama_obat', 'like', '%' . $request->search . '%')
+                    ->orWhere('katagori', 'like', '%' . $request->search . '%');
+            });
+        }
+
+         $medicines = $medicinesQuery->orderBy('nama_obat', 'asc')->paginate(10);
         
         // Get antrians for the selected date
         $menungguAntrians = Antrian::where('dokter_id', $dokter->id)
@@ -54,17 +66,52 @@ class DokterDashboardController
             ->orderBy('nomor_antrian')
             ->get();
 
+        // Get antrians for the selected date
+        $menungguAntrians = Antrian::where('dokter_id', $dokter->id)
+            ->whereHas('Pendaftaran', function ($query) use ($selectedDate) {
+                $query->whereDate('tanggal_berobat', $selectedDate);
+            })
+            ->where('status', 'menunggu')
+            ->with(['pendaftaran.pasien.user', 'pendaftaran.poli'])
+            ->orderBy('nomor_antrian')
+            ->get();
+            
+        $lewatiAntrians = Antrian::where('dokter_id', $dokter->id)
+            ->whereDate('created_at', $selectedDate)
+            ->where('status', 'lewati')
+            ->with(['pendaftaran.pasien.user', 'pendaftaran.poli'])
+            ->orderBy('nomor_antrian')
+            ->get();
+            
+        $selesaiAntrians = Antrian::where('dokter_id', $dokter->id)
+            ->whereDate('created_at', $selectedDate)
+            ->where('status', 'selesai')
+            ->with(['pendaftaran.pasien.user', 'pendaftaran.poli'])
+            ->orderBy('nomor_antrian')
+            ->get();
+
         return view('dashboard.dokter.index', compact(
             'menungguAntrians', 
             'lewatiAntrians', 
             'selesaiAntrians', 
             'selectedDate',
-            'weekDates'
+            'weekDates',
+            'medicines'
         ));
     }
 
     public function nextPatient(Request $request, Antrian $antrian)
     {
+       
+    // Debug incoming data
+    dd([
+        'request_all' => $request->all(),
+    ]);
+
+    // dd($request->all());
+
+    // Rest of your code...
+
         $request->validate([
             'diagnosa' => 'required|string',
             'obat' => 'required|string',
@@ -91,27 +138,9 @@ class DokterDashboardController
             'keluhan' => $antrian->pendaftaran->keluhan,
             'diagnosa' => $request->diagnosa,
             'obat' => $request->obat,
+            'pilihan' => $request->pilihan, // Tambahkan ini
         ]);
 
-        // Get Next Antrian
-
-        $nextAntrian = Antrian::where('dokter_id', $antrian->dokter_id)
-        ->whereHas('pendaftaran', function($query) use ($antrian) {
-            $query->whereDate('tanggal_berobat', $antrian->pendaftaran->tanggal_berobat);
-        })
-            ->where('status', 'menunggu')
-            ->orderBy('nomor_antrian')
-            ->first();
-
-
-        // Broadcast Event untuk update antrian
-        event(new \App\Events\AntrianUpdated(
-            $antrian->pendaftaran->poli_id,
-            $antrian->kode_antrian,
-            $nextAntrian ? $nextAntrian->kode_antrian : null,
-            $antrian->pendaftaran->tanggal_berobat
-        ));
-        
         return redirect()->route('dokter.dashboard')
             ->with('success', 'Pasien selesai diperiksa dan rekam medis telah diperbarui');
     }

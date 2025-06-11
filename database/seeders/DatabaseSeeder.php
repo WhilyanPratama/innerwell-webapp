@@ -279,6 +279,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             JadwalDokterSeeder::class,
+            MedicineSeeder::class,
         ]);
     } 
 }

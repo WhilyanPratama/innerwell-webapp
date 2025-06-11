@@ -256,42 +256,51 @@
                                                     {{ ucfirst($antrian->status) }}
                                                 </span>
                                             </td>
-                                            <td class="action-form">
-                                                <form action="{{ route('dokter.next', $antrian->id) }}" method="POST" class="space-y-2">
-                                                    @csrf
-                                                    <div>
-                                                        <label for="diagnosa_{{ $antrian->id }}" class="sr-only">Diagnosa</label>
-                                                        <textarea id="diagnosa_{{ $antrian->id }}" name="diagnosa" rows="2" required placeholder="Diagnosa...">{{ old('diagnosa') }}</textarea>
-                                                        @error('diagnosa') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                                                    </div>
-                                                    <div>
-                                                        <label for="obat_{{ $antrian->id }}" class="sr-only">Obat</label>
-                                                        <textarea id="obat_{{ $antrian->id }}" name="obat" rows="2" required placeholder="Obat/Resep...">{{ old('obat') }}</textarea>
-                                                        @error('obat') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                                                    </div>
-                                                    <div class="flex items-center space-x-2">
+                                                <td class="action-form">
+                                                    <form action="{{ route('dokter.next', $antrian->id) }}" method="POST" class="space-y-2">
+                                                        @csrf
+                                                        <div>
+                                                            <label for="diagnosa_{{ $antrian->id }}" class="sr-only">Diagnosa</label>
+                                                            <textarea id="diagnosa_{{ $antrian->id }}" name="diagnosa" rows="2" required placeholder="Diagnosa...">{{ old('diagnosa') }}</textarea>
+                                                            @error('diagnosa') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                                                        </div>
+                                                        
+                                                        <!-- Pastikan ada default value -->
+                                                        <input type="hidden" name="obat" id="obat_{{ $antrian->id }}" value="Tidak ada obat">
+                                                        
                                                         <button type="submit" class="button-selesai">
                                                             Selesai
                                                         </button>
-                                                    </div>
-                                                </form>
-                                                <form action="{{ route('dokter.skip', $antrian->id) }}" method="POST" class="inline mt-2">
-                                                    @csrf
-                                                    <button type="submit" class="button-lewati">
-                                                        Lewati
-                                                    </button>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="6" class="text-center text-gray-500 py-6">Tidak ada pasien yang menunggu pada tanggal ini.</td>
-                                        </tr>
-                                    @endforelse
+                                                    </form>
+                                                    <form action="{{ route('dokter.skip', $antrian->id) }}" method="POST" class="inline mt-2">
+                                                        @csrf
+                                                        <button type="submit" class="button-lewati">
+                                                            Lewati
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="6" class="text-center text-gray-500 py-6">Tidak ada pasien yang menunggu pada tanggal ini.</td>
+                                            </tr>
+                                        @endforelse
                                 </tbody>
                             </table>
                         </div>
                     </div>
+
+                    @if($menungguAntrians->isNotEmpty())
+                        <div class="bg-blue-50 rounded-lg p-4 mb-4">
+                            <h3 class="font-semibold mb-2 text-blue-800">
+                                Obat untuk: {{ $menungguAntrians->first()->pendaftaran->pasien->user->nama_lengkap }}
+                            </h3>
+                            <div id="selected-medicines-display" class="min-h-[50px]">
+                                <p id="no-medicine-text" class="text-gray-500 italic">Belum ada obat yang dipilih</p>
+                                <div id="medicine-list" class="space-y-2"></div>
+                            </div>
+                        </div>
+                    @endif
 
                     <div class="bg-white rounded-lg shadow-md mb-8 overflow-hidden">
                          <h2 class="text-lg font-semibold text-gray-700 px-6 py-4 border-b border-gray-200">Daftar Pasien yang Dilewati</h2>
@@ -393,6 +402,82 @@
                         </div>
                     </div>
 
+                   <div class="mt-8 bg-white rounded-lg shadow-md p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-xl font-semibold">Daftar Obat Tersedia</h2>
+                            <form method="GET" class="flex gap-2 ml-2">
+                                <input type="hidden" name="date" value="{{ request('date') }}">
+                                <input type="text"
+                                    name="search"
+                                    value="{{ request('search') }}"
+                                    placeholder="Cari nama obat atau kategori..."
+                                    class="border rounded px-3 py-2 w-64">
+                                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
+                                    Cari
+                                </button>
+                            </form>
+                        </div>
+                        
+                        <!-- Tambahkan sebelum tabel medicine untuk debug -->
+                        <!-- <div class="bg-yellow-100 p-4 rounded mb-4">
+                            <p><strong>Debug Info:</strong></p>
+                            <p>Kode Poli Dokter: {{ Auth::user()->dokter->kode_poli ?? 'Tidak ada' }}</p>
+                            <p>Total Medicine: {{ $medicines->total() ?? 0 }}</p>
+                            <p>Search: {{ request('search') ?? 'Tidak ada' }}</p>
+                        </div> -->
+                        
+                        <div class="table-container">
+                            <table class="w-full">
+                                <thead>
+                                    <tr>
+                                        <th>Nama Obat</th>
+                                        <th>Kategori</th>
+                                        <th>Jenis</th>
+                                        <th>Stok</th>
+                                        <th>Harga</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($medicines as $medicine)
+                                        <tr>
+                                            <td>{{ $medicine->nama_obat }}</td>
+                                            <td>{{ $medicine->katagori }}</td>
+                                            <td>{{ $medicine->jenis }}</td>
+                                            <td>{{ $medicine->jumlah }}</td>
+                                            <td>Rp {{ number_format($medicine->harga, 0, ',', '.') }}</td>
+                                            <td>
+                                                <button type="button" 
+                                                        class="add-medicine px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
+                                                        data-medicine-id="{{ $medicine->id }}"
+                                                        data-medicine-name="{{ $medicine->nama_obat }}"
+                                                        data-medicine-price="{{ $medicine->harga }}">
+                                                    + Tambah
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="6" class="text-center text-gray-500 py-6">
+                                                @if(request('search'))
+                                                    Tidak ada obat yang ditemukan untuk pencarian "{{ request('search') }}"
+                                                @else
+                                                    Tidak ada obat tersedia.
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        @if($medicines->hasPages())
+                            <div class="mt-4">
+                                {{ $medicines->appends(request()->query())->links() }}
+                            </div>
+                        @endif
+                    </div>
+
                 </div>
             </main>
         </div>
@@ -433,6 +518,83 @@
         });
 
     </script>
+
+<script>
+let selectedMedicines = [];
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Event listener untuk tombol tambah obat
+    document.querySelectorAll('.add-medicine').forEach(button => {
+        button.addEventListener('click', function() {
+            const medicineId = this.getAttribute('data-medicine-id');
+            const medicineName = this.getAttribute('data-medicine-name');
+            const medicinePrice = this.getAttribute('data-medicine-price') || '0';
+            
+            // Cek apakah obat sudah dipilih
+            if (selectedMedicines.find(m => m.id === medicineId)) {
+                alert('Obat sudah dipilih!');
+                return;
+            }
+            
+            // Tambah ke array
+            selectedMedicines.push({
+                id: medicineId,
+                name: medicineName,
+                price: medicinePrice
+            });
+            
+            updateMedicineDisplay();
+            updateHiddenInputs();
+        });
+    });
+});
+
+function updateMedicineDisplay() {
+    const container = document.getElementById('medicine-list');
+    const noMedicineText = document.getElementById('no-medicine-text');
+    
+    if (selectedMedicines.length === 0) {
+        noMedicineText.style.display = 'block';
+        container.innerHTML = '';
+        return;
+    }
+    
+    noMedicineText.style.display = 'none';
+    container.innerHTML = selectedMedicines.map((medicine, index) => `
+        <div class="flex justify-between items-center bg-white p-3 rounded border border-blue-200">
+            <div>
+                <span class="font-medium">${medicine.name}</span>
+                <span class="text-sm text-gray-500 ml-2">Rp ${parseInt(medicine.price).toLocaleString('id-ID')}</span>
+            </div>
+            <button type="button" 
+                    onclick="removeMedicine(${index})" 
+                    class="text-red-500 hover:text-red-700 p-1">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                </svg>
+            </button>
+        </div>
+    `).join('');
+}
+
+function removeMedicine(index) {
+    selectedMedicines.splice(index, 1);
+    updateMedicineDisplay();
+    updateHiddenInputs();
+}
+
+function updateHiddenInputs() {
+    const firstForm = document.querySelector('.action-form form');
+    if (firstForm) {
+        const obatInput = firstForm.querySelector('input[name="obat"]');
+        if (obatInput && selectedMedicines.length > 0) {
+            // Store medicine IDs with semicolon separator
+            obatInput.value = selectedMedicines.map(m => m.id).join(' ; ');
+            console.log('Updated obat value:', obatInput.value); // Debug line
+        }
+    }
+}
+</script>
 
 </body>
 </html>
