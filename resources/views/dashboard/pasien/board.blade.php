@@ -44,7 +44,7 @@
                         
                         if (yourNum > nextNum) {
                             const waitingCount = yourNum - nextNum;
-                            const estimatedWait = waitingCount * 10; // Assuming 10 minutes per patient
+                            const estimatedWait = waitingCount * 10; 
                             document.getElementById('wait-time').textContent = estimatedWait;
                         } else if (yourNum === nextNum) {
                             document.getElementById('wait-time').textContent = 'Anda Sekarang!';

@@ -9,6 +9,7 @@ use App\Http\Controllers\DokterDashboardController;
 use App\Http\Controllers\PasienDashboardController;
 use App\Http\Controllers\AntrianBoardController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PembayaranController;
 
 Route::get('/', function () {
     return view('home');
@@ -37,7 +38,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/dokter/antrian/{antrian}/skip', [DokterDashboardController::class, 'skipPatient'])->name('dokter.skip');
     Route::post('/dokter/antrian/{antrian}/process-skipped', [DokterDashboardController::class, 'processSkippedPatient'])->name('dokter.process-skipped');
     Route::get('/dokter/medical-record/{pasien}', [DokterDashboardController::class, 'viewMedicalRecord'])->name('dokter.medical-record');
-
+    Route::get('/dashboard/pasien/pembayaran', [PembayaranController::class, 'index'])->name('pasien.pembayaran');
 });
 
 // Admin routes
@@ -57,13 +58,14 @@ Route::middleware('role:dokter')->group(function () {
 });
 
 // Pasien routes
-Route::middleware('role:pasien')->group(function () {
+Route::middleware(['auth', 'role:pasien'])->group(function () {
     Route::get('/pasien/dashboard', [PasienDashboardController::class, 'index'])->name('pasien.dashboard'); 
     Route::get('/pendaftaran/create', [PasienPendaftaranController::class, 'create'])->name('pendaftaran.create');
     Route::post('/pendaftaran', [PasienPendaftaranController::class, 'store'])->name('pendaftaran.store');
     Route::get('/pendaftaran/jadwal-dokter', [PasienPendaftaranController::class, 'getJadwalDokter'])->name('pendaftaran.jadwal-dokter');
     Route::get('/pendaftaran/status', [PasienPendaftaranController::class, 'status'])->name('pendaftaran.status');
     Route::get('/antrian/board/{poli}', [AntrianBoardController::class, 'index'])->name('antrian.board');
+    Route::get('/dashboard/pasien/pembayaran', [PembayaranController::class, 'index'])->name('pasien.pembayaran');
 });
 
 // Manajemen routes
