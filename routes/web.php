@@ -73,7 +73,7 @@ Route::middleware(['auth', 'role:pasien'])->group(function () {
     Route::get('/pendaftaran/jadwal-dokter', [PasienPendaftaranController::class, 'getJadwalDokter'])->name('pendaftaran.jadwal-dokter');
     Route::get('/pendaftaran/status', [PasienPendaftaranController::class, 'status'])->name('pendaftaran.status');
     Route::get('/antrian/board/{poli}', [AntrianBoardController::class, 'index'])->name('antrian.board');
-    Route::get('/dashboard/pasien/pembayaran', [PembayaranController::class, 'index'])->name('pasien.pembayaran');
+    Route::get('/pembayaran/show/{pembayaran}', [PasienDashboardController::class, 'showInvoice'])->name('pembayaran.show');
 });
 
 // Manajemen routes
