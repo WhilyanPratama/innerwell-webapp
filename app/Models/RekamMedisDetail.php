@@ -39,4 +39,9 @@ class RekamMedisDetail extends Model
     {
         return $this->belongsTo(Poli::class);
     }
+
+    public function pembayaran()
+    {
+        return $this->hasOne(Pembayaran::class, 'rekam_medis_details_id');
+    }
 }

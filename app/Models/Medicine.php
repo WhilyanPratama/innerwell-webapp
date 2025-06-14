@@ -28,4 +28,8 @@ class Medicine extends Model
         'jumlah',
         'harga',
     ];
+
+    public function poli(){
+        return $this->belongsTo(Poli::class, 'kode_poli', 'kode_poli');
+    }
 }

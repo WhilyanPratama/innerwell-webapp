@@ -58,7 +58,7 @@
                                             {{ $detail->dokter->user->nama_lengkap }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                            <a href="{{ route('pembayaran.create', $detail->id) }}" 
+                                            <a href="{{ route('admin.pembayaran.create', $detail->id) }}" 
                                                class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm">
                                                 Buat Invoice
                                             </a>
@@ -120,7 +120,7 @@
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                            <a href="{{ route('pembayaran.show', $pembayaran->id) }}" 
+                                            <a href="{{ route('admin.pembayaran.show', $pembayaran->id) }}" 
                                                class="text-blue-600 hover:text-blue-900">Lihat Invoice</a>
                                         </td>
                                     </tr>

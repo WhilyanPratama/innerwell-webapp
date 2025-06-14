@@ -8,8 +8,9 @@ use App\Http\Controllers\PasienPendaftaranController;
 use App\Http\Controllers\DokterDashboardController;
 use App\Http\Controllers\PasienDashboardController;
 use App\Http\Controllers\AntrianBoardController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PembayaranController;
+use App\Http\Controllers\AdminDashboardController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('home');
@@ -39,11 +40,18 @@ Route::middleware('auth')->group(function () {
     Route::post('/dokter/antrian/{antrian}/process-skipped', [DokterDashboardController::class, 'processSkippedPatient'])->name('dokter.process-skipped');
     Route::get('/dokter/medical-record/{pasien}', [DokterDashboardController::class, 'viewMedicalRecord'])->name('dokter.medical-record');
     Route::get('/dashboard/pasien/pembayaran', [PembayaranController::class, 'index'])->name('pasien.pembayaran');
+    Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/pembayaran/create/{rekamMedisDetail}', [AdminDashboardController::class, 'create'])->name('pembayaran.create');
+    Route::post('/pembayaran/store/{rekamMedisDetail}', [AdminDashboardController::class, 'store'])->name('pembayaran.store');
+    Route::get('/pembayaran/show/{pembayaran}', [AdminDashboardController::class, 'show'])->name('pembayaran.show');
 });
 
 // Admin routes
 Route::middleware('role:admin')->group(function () {
-    Route::get('/admin/dashboard', [DashboardController::class, 'admin'])->name('admin.dashboard');
+    Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/pembayaran/create/{rekamMedisDetail}', [AdminDashboardController::class, 'create'])->name('pembayaran.create');
+    Route::post('/pembayaran/store/{rekamMedisDetail}', [AdminDashboardController::class, 'store'])->name('pembayaran.store');
+    Route::get('/pembayaran/show/{pembayaran}', [AdminDashboardController::class, 'show'])->name('pembayaran.show');
 });
 
 // Dokter routes
