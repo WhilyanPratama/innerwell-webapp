@@ -1,12 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-namespace App\Models\RekamMedisDetail;
-namespace App\Models\Pembayaran;
-namespace App\Models\Medicine;
+
+use App\Models\RekamMedisDetail\RekamMedisDetail; 
+use App\Models\Pembayaran\Pembayaran;              
+use App\Models\Medicine\Medicine;                  
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-
 
 class PembayaranController
 {

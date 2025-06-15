@@ -11,6 +11,7 @@ use App\Http\Controllers\AntrianBoardController;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\AdminDashboardController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MidtransController; 
 
 Route::get('/', function () {
     return view('home');
@@ -74,6 +75,7 @@ Route::middleware(['auth', 'role:pasien'])->group(function () {
     Route::get('/pendaftaran/status', [PasienPendaftaranController::class, 'status'])->name('pendaftaran.status');
     Route::get('/antrian/board/{poli}', [AntrianBoardController::class, 'index'])->name('antrian.board');
     Route::get('/pembayaran/show/{pembayaran}', [PasienDashboardController::class, 'showInvoice'])->name('pembayaran.show');
+    Route::get('/pasien/pembayaran/pay/{pembayaran}', [MidtransController::class, 'pay'])->name('pasien.pembayaran.pay');
 });
 
 // Manajemen routes
@@ -86,3 +88,6 @@ Route::middleware('role:resepsionis')->group(function () {
     Route::get('/resepsionis/dashboard', [ResepsionisDashboardController::class, 'index'])->name('resepsionis.dashboard');
     Route::post('/resepsionis/dashboard/{pendaftaran}/validate', [ResepsionisDashboardController::class, 'validate'])->name('resepsionis.validate');
 });
+
+// Midtrans Notification Route (tanpa prefix dan middleware auth)
+Route::post('/midtrans/callback', [MidtransController::class, 'callback'])->name('midtrans.callback');
