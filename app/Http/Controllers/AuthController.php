@@ -67,11 +67,13 @@ class AuthController
             'password' => 'required'
         ]);
 
+        //dd(Auth::attempt($credentials));
+
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             
             $role = Auth::user()->role;
-            // dd("User role: " . $role); // This will show us the actual role value
+            //dd("User role: " . $role); // This will show us the actual role value
             
             return redirect("/$role/dashboard");
         }
