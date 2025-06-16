@@ -12,21 +12,18 @@ class MidtransController extends Controller
 {
     public function __construct()
     {
-        // Set konfigurasi Midtrans saat controller diinisialisasi
         Config::$serverKey = config('midtrans.server_key');
         Config::$isProduction = config('midtrans.is_production');
-        Config::$isSanitized = true;
+        Config::$isSanitized = false;
         Config::$is3ds = true;
     }
 
     public function pay(Pembayaran $pembayaran)
     {
-        // Pastikan pembayaran ini milik user yang sedang login
         if ($pembayaran->rekamMedisDetail->rekamMedis->pasien->user_id !== Auth::id()) {
             abort(403, 'Anda tidak memiliki akses ke pembayaran ini.');
         }
 
-        // Buat parameter untuk Midtrans Snap
         $params = [
             'transaction_details' => [
                 'order_id' => $pembayaran->id,
