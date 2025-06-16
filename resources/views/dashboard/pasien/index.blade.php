@@ -451,7 +451,7 @@
                                                         {{ \Carbon\Carbon::parse($pembayaran->tanggal_bayar)->format('d M Y') }}
                                                     </td>
                                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                                        <a href="{{ route('pasien.pembayaran.show', $pembayaran->id) }}" 
+                                                        <a href="{{ route('pasien.pembayaran', $pembayaran->id) }}" 
                                                            class="text-blue-600 hover:text-blue-900">Lihat Invoice</a>
                                                     </td>
                                                 </tr>

@@ -76,16 +76,18 @@ class PasienDashboardController
         }
 
         // Get unpaid invoices
-        $tagihanBelumLunas = Pembayaran::whereHas('rekamMedisDetail', function($query) use ($pasien) {
-            $query->whereHas('rekamMedis', function($q) use ($pasien) {
-                $q->where('pasien_id', $pasien->id);
-            });
-        })->where('status_pembayaran', 'belum lunas')
-        ->orderBy('created_at', 'desc')
-        ->get();
+        $tagihanBelumLunas = Pembayaran::with(['rekamMedisDetail.poli', 'rekamMedisDetail.dokter.user'])
+            ->whereHas('rekamMedisDetail', function($query) use ($pasien) {
+                $query->whereHas('rekamMedis', function($q) use ($pasien) {
+                    $q->where('pasien_id', $pasien->id);
+                });
+            })->where('status_pembayaran', 'belum lunas')
+            ->orderBy('created_at', 'desc')
+            ->get();
         
         // Get payment history
-        $riwayatPembayaran = Pembayaran::whereHas('rekamMedisDetail', function($query) use ($pasien) {
+        $riwayatPembayaran = Pembayaran::with(['rekamMedisDetail.poli', 'rekamMedisDetail.dokter.user'])
+        ->whereHas('rekamMedisDetail', function($query) use ($pasien) {
             $query->whereHas('rekamMedis', function($q) use ($pasien) {
                 $q->where('pasien_id', $pasien->id);
             });
