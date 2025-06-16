@@ -89,5 +89,5 @@ Route::middleware('role:resepsionis')->group(function () {
     Route::post('/resepsionis/dashboard/{pendaftaran}/validate', [ResepsionisDashboardController::class, 'validate'])->name('resepsionis.validate');
 });
 
-// Midtrans Notification Route (tanpa prefix dan middleware auth)
+// Midtrans Notification Route 
 Route::post('/midtrans/callback', [MidtransController::class, 'callback'])->name('midtrans.callback');

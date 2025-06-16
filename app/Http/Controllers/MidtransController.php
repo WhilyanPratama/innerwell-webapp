@@ -40,9 +40,7 @@ class MidtransController extends Controller
         ];
 
         try {
-            // Dapatkan Snap Token
             $snapToken = Snap::getSnapToken($params);
-            // Kirim Snap Token ke view
             return view('pembayaran.pay', compact('snapToken', 'pembayaran'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal memulai pembayaran: ' . $e->getMessage());
@@ -51,18 +49,31 @@ class MidtransController extends Controller
 
     public function callback(Request $request)
     {
+        \Log::info('Midtrans callback received', $request->all());
+        
         $serverKey = config('midtrans.server_key');
         $hashed = hash("sha512", $request->order_id . $request->status_code . $request->gross_amount . $serverKey);
 
         if ($hashed == $request->signature_key) {
+            \Log::info('Signature verified');
             if ($request->transaction_status == 'capture' || $request->transaction_status == 'settlement') {
                 $pembayaran = Pembayaran::find($request->order_id);
                 if ($pembayaran && $pembayaran->status_pembayaran === 'belum lunas') {
                     $pembayaran->status_pembayaran = 'lunas';
                     $pembayaran->tanggal_bayar = now();
                     $pembayaran->save();
+                    \Log::info('Payment status updated to lunas', ['id' => $pembayaran->id]);
+                } else {
+                    \Log::info('Payment not found or already paid', ['id' => $request->order_id]);
                 }
+            } else {
+                \Log::info('Transaction status not capture/settlement', ['status' => $request->transaction_status]);
             }
+        } else {
+            \Log::warning('Invalid signature', [
+                'received' => $request->signature_key,
+                'calculated' => $hashed
+            ]);
         }
 
         return response('OK', 200);

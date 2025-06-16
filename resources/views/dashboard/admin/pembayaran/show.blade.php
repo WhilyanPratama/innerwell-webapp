@@ -104,8 +104,7 @@
                                 Cetak
                             </button>
                             
-                            {{-- Tombol Bayar hanya untuk Pasien dan jika belum lunas --}}
-                            @if(Auth::check() && Auth::user()->role === 'pasien' && $pembayaran->status_pembayaran === 'belum lunas')
+                            @if(Auth::check() && Auth::user()->role === 'pasien')
                                 <a href="{{ route('pasien.pembayaran.pay', $pembayaran->id) }}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">
                                     Bayar Sekarang
                                 </a>
