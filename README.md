@@ -7,13 +7,6 @@
   <img style="margin-right: 8px;" src="https://img.shields.io/badge/Docker-%234688F1.svg?style=for-the-badge&logo=docker&logoColor=white" />
 </p>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
-
 Aplikasi Klinik InnerWell adalah sebuah sistem manajemen klinik berbasis web yang dibangun dengan Laravel. Aplikasi ini bertujuan untuk mempermudah pengelolaan data pasien, jadwal dokter, antrian, dan berbagai aspek operasional klinik lainnya. Dengan antarmuka yang intuitif dan fitur-fitur yang lengkap, InnerWell membantu meningkatkan efisiensi dan kualitas pelayanan klinik.
 
 ## Fitur Utama ✨
@@ -28,50 +21,79 @@ Aplikasi Klinik InnerWell adalah sebuah sistem manajemen klinik berbasis web yan
 *   Bahasa: PHP
 *   Framework: Laravel
 *   Templating Engine: Blade
-*   Database: (Kemungkinan) MySQL atau PostgreSQL 
+*   Database: MySQL
 *   Containerization: Docker
 
-## Instalasi & Menjalankan 🚀
+### Prasyarat
 
-1.  Clone repositori:
-    ```bash
-    git clone https://github.com/WhilyanPratama/innerwell-webapp
-    ```
+Pastikan telah terinstall:
 
-2.  Masuk ke direktori:
-    ```bash
+* **Docker & Docker Compose**: [Panduan Instalasi Docker](https://docs.docker.com/get-docker/)
+* **Git**: Untuk melakukan kloning repositori.
+* **Terminal/Shell**: Seperti Command Prompt, PowerShell, atau Terminal di Linux/macOS.
+
+### Instalasi dengan Docker
+
+Metode yang direkomendasikan untuk menjalankan aplikasi ini adalah menggunakan Docker untuk memastikan konsistensi lingkungan.
+
+1.  **Kloning Repositori**
+    ```sh
+    git clone [https://github.com/whilyanpratama/innerwell-webapp.git](https://github.com/whilyanpratama/innerwell-webapp.git)
     cd innerwell-webapp
     ```
 
-3.  Install dependensi:
-    ```bash
-    composer install
+2.  **Konfigurasi Environment**
+    Salin file `.env.example` menjadi `.env`. File ini berisi konfigurasi utama aplikasi.
+    ```sh
+    cp .env.example .env
     ```
-   Pastikan Composer sudah terinstall di sistem Anda. Jika belum, unduh dan install dari [https://getcomposer.org/](https://getcomposer.org/)
+    Buka file `.env` dan sesuaikan konfigurasi database dan layanan lain jika diperlukan. Konfigurasi default sudah disesuaikan untuk Docker.
 
-4.  Salin file `.env.example` menjadi `.env`:
-     ```bash
-     cp .env.example .env
-     ```
-
-5.  Generate application key:
-    ```bash
-    php artisan key:generate
+3.  **Jalankan Container Docker**
+    Bangun dan jalankan semua service (Nginx, PHP, MySQL) menggunakan `docker-compose`.
+    ```sh
+    docker-compose up -d --build
     ```
 
-6. Konfigurasi database pada file `.env`. Sesuaikan dengan pengaturan database lokal Anda.
-
-7. Migrasi database:
-    ```bash
-    php artisan migrate
+4.  **Install Dependensi (Composer)**
+    Masuk ke dalam container `app` dan install semua dependensi PHP.
+    ```sh
+    docker-compose exec app composer install
     ```
 
-8.  Jalankan proyek:
-    ```bash
-    php artisan serve
+5.  **Install Dependensi (NPM)**
+    Install dependensi JavaScript yang dibutuhkan.
+    ```sh
+    docker-compose exec app npm install
     ```
 
-    Buka browser Anda dan kunjungi `http://localhost:8000`.
+6.  **Generate Application Key**
+    Buat kunci enkripsi unik untuk aplikasi Laravel Anda.
+    ```sh
+    docker-compose exec app php artisan key:generate
+    ```
+
+7.  **Jalankan Migrasi & Seeder Database**
+    Buat struktur tabel database dan isi dengan data awal (termasuk akun demo).
+    ```sh
+    docker-compose exec app php artisan migrate --seed
+    ```
+
+8.  **Hubungkan Penyimpanan**
+    Buat symbolic link dari `public/storage` ke `storage/app/public`.
+    ```sh
+    docker-compose exec app php artisan storage:link
+    ```
+
+9.  **Compile Aset Frontend**
+    Jalankan Vite untuk meng-compile file CSS dan JS.
+    ```sh
+    docker-compose exec app npm run dev
+    ```
+
+10. **Selesai!**
+    Aplikasi sekarang seharusnya sudah berjalan. Buka browser Anda dan akses:
+    [**http://localhost:8000**](http://localhost:8000)
 
 ## Cara Berkontribusi 🤝
 
