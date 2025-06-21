@@ -9,27 +9,26 @@ use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\URL; 
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
+
     public function register(): void
     {
-        //
+
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
+        if ($this->app->environment('production')) {
+            URL::forceScheme('https');
+        }
+
         Model::preventLazyLoading(!app()->isProduction());
         Route::middleware('web')
             ->group(base_path('routes/web.php'));
 
-        // Register the role middleware
         Route::aliasMiddleware('role', \App\Http\Middleware\CheckRole::class);
     }
 }
