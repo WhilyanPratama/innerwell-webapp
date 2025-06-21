@@ -7,7 +7,7 @@
   <img style="margin-right: 8px;" src="https://img.shields.io/badge/Docker-%234688F1.svg?style=for-the-badge&logo=docker&logoColor=white" />
 </p>
 
-Aplikasi Klinik InnerWell adalah sebuah sistem manajemen klinik berbasis web yang dibangun dengan Laravel. Aplikasi ini bertujuan untuk mempermudah pengelolaan data pasien, jadwal dokter, antrian, dan berbagai aspek operasional klinik lainnya. Dengan antarmuka yang intuitif dan fitur-fitur yang lengkap, InnerWell membantu meningkatkan efisiensi dan kualitas pelayanan klinik.
+InnerWell Klinic WebApp adalah sebuah sistem manajemen klinik berbasis web yang dibangun dengan Laravel. Aplikasi ini bertujuan untuk mempermudah pengelolaan data pasien, jadwal dokter, antrian, dan berbagai aspek operasional klinik lainnya. Dengan antarmuka yang intuitif dan fitur-fitur yang lengkap, InnerWell membantu meningkatkan efisiensi dan kualitas pelayanan klinik.
 
 ## Fitur Utama ✨
 
