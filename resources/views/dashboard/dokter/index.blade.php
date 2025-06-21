@@ -431,7 +431,7 @@
                                 <thead>
                                     <tr>
                                         <th>Nama Obat</th>
-                                        <th>Kategori</th>
+                                        <th>Katagori</th>
                                         <th>Jenis</th>
                                         <th>Stok</th>
                                         <th>Harga</th>

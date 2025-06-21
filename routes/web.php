@@ -10,6 +10,7 @@ use App\Http\Controllers\PasienDashboardController;
 use App\Http\Controllers\AntrianBoardController;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\ManajemenDashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MidtransController; 
 
@@ -80,7 +81,9 @@ Route::middleware(['auth', 'role:pasien'])->group(function () {
 
 // Manajemen routes
 Route::middleware('role:manajemen')->group(function () {
-    Route::get('/manajemen/dashboard', [DashboardController::class, 'manajemen'])->name('manajemen.dashboard');
+    Route::get('/manajemen/dashboard', [ManajemenDashboardController::class, 'index'])->name('manajemen.dashboard');
+    Route::get('/manajemen/invoice/{pembayaran}', [ManajemenDashboardController::class, 'showInvoice'])->name('manajemen.invoice.show');
+
 });
 
 // Resepsionis routes
